@@ -1,13 +1,13 @@
 const ethers = require("ethers");
-const process = require("../env");
+const {env} = require("../env");
 
 const etherscan = require("./etherscan");
 const abi = require("../json/MyNFT.json").abi;
 
-const provider = new ethers.providers.AlchemyProvider("goerli", process.env.API_KEY);
-const signers = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+const provider = new ethers.providers.AlchemyProvider("goerli", env.API_KEY);
+const signers = new ethers.Wallet(env.PRIVATE_KEY, provider);
 
-const myNFTContract = new ethers.Contract(process.env.CONTRACT_ADDRESS, abi, signers);
+const myNFTContract = new ethers.Contract(env.CONTRACT_ADDRESS, abi, signers);
 
 const mint = async(tokenURI) => {
     try {
@@ -25,6 +25,7 @@ const mint = async(tokenURI) => {
     }
 }
 
+// Lấy kết quả khi mint xong: 
 const getResult = async(tokenURI) => {
     const responseMint = await mint(tokenURI);
 
@@ -52,5 +53,6 @@ const getResult = async(tokenURI) => {
 }
 
 module.exports = {
-    getResult: getResult,
+    mint,
+    getResult,
 }

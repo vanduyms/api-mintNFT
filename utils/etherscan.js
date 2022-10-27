@@ -17,12 +17,14 @@ const getTransactionFee = async(txHash) => {
         const baseFeePerGas = parseInt(infoBlockNumber.baseFeePerGas) / (10**8);
         const maxPriorityFeePerGas = parseInt(infoTransaction.result.maxPriorityFeePerGas) / (10 ** 8);
         const gasUsed = parseInt(transactionReceipt.result.gasUsed) / (10** 6);
-        
+
+        // Phí giao dịch: (baseFeePerGas + maxPriorityFeePerGas) * gasUsed  --- đơn vị ETH
         const transactionFee = (baseFeePerGas + maxPriorityFeePerGas) * gasUsed / (10**4);
 
         const getAllTransaction = await axios.get(`https://api-goerli.etherscan.io/api?module=account&action=tokennfttx&contractaddress=${process.env.CONTRACT_ADDRESS}&address=${env.ACCOUNT_ADDRESS}&page=1&offset=1000&startblock=0&endblock=99999999&sort=asc&apikey=EPP7MJEBPS986NUJEA12SKMTAKCSC45QQ3`)
             .then(result => result.data.result)
 
+        // Lấy token của NFT vừa mint
         const tokenID = parseInt(getAllTransaction[getAllTransaction.length - 1].tokenID) + 1;
 
         return {
